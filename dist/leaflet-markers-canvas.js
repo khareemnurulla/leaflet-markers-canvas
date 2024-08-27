@@ -244,7 +244,6 @@
 
     _addMarker: function _addMarker(marker) {
       if (marker.options.pane !== "markerPane" || !marker.options.icon) {
-        console.error("This is not a marker", marker);
 
         return { markerBox: null, positionBox: null, isVisible: null };
       }
@@ -373,7 +372,14 @@
 
       // draw only visible markers
       var markers = [];
-      this._positionsTree.search(mapBoundsBox).forEach(function (ref) {
+      var sortedMarkers = this._positionsTree.search(mapBoundsBox);
+
+      sortedMarkers.sort(function (a, b) {
+        return (a && a.marker && a.marker.options && a.marker.options.zIndexOffset) -
+         (b && b.marker && b.marker.options && b.marker.options.zIndexOffset);
+      });
+
+      sortedMarkers.forEach(function (ref) {
         var marker = ref.marker;
 
         var latLng = marker.getLatLng();
