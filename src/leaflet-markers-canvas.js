@@ -226,7 +226,6 @@ const markersCanvas = {
 
   _addMarker(marker) {
     if (marker.options.pane !== "markerPane" || !marker.options.icon) {
-      console.error("This is not a marker", marker);
 
       return { markerBox: null, positionBox: null, isVisible: null };
     }
@@ -334,7 +333,13 @@ const markersCanvas = {
 
     // draw only visible markers
     const markers = [];
-    this._positionsTree.search(mapBoundsBox).forEach(({ marker }) => {
+    const sortedMarkers = this._positionsTree.search(mapBoundsBox);
+
+    sortedMarkers.sort((a, b) => {
+      return a?.marker?.options?.zIndexOffset - b?.marker?.options?.zIndexOffset;
+    })
+
+    sortedMarkers.forEach(({ marker }) => {
       const latLng = marker.getLatLng();
       const { x, y } = this._map.latLngToContainerPoint(latLng);
       const { iconSize, iconAnchor } = marker.options.icon.options;
