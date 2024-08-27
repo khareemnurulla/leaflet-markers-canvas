@@ -30,6 +30,11 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
+    # Copy .d.ts files from src to dist directory
+    - name: Copy .d.ts files
+      if: success()
+      run: cp -r src/*.d.ts dist/
+
     # Upload build artifacts from the /dist directory
     - name: Upload build artifacts
       if: success()
