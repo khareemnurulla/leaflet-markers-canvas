@@ -6,6 +6,8 @@ name: Node.js CI
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+      - 'dist/**'  # Ignore changes in the dist directory to avoid triggering the workflow again
   pull_request:
     branches: [ "master" ]
 
@@ -35,3 +37,13 @@ jobs:
       with:
         name: build-artifacts
         path: dist/
+
+    # Commit and push the build artifacts in the /dist directory
+    - name: Commit build artifacts
+      if: success()
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+        git add dist/
+        git commit -m "add build artifacts [skip ci]"
+        git push origin ${{ github.ref }}
