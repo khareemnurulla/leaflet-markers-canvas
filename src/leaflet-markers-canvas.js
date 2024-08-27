@@ -336,7 +336,8 @@ const markersCanvas = {
     const sortedMarkers = this._positionsTree.search(mapBoundsBox);
 
     sortedMarkers.sort((a, b) => {
-      return a?.marker?.options?.zIndexOffset - b?.marker?.options?.zIndexOffset;
+      return (a && a.marker && a.marker.options && a.marker.options.zIndexOffset) -
+       (b && b.marker && b.marker.options && b.marker.options.zIndexOffset);
     })
 
     sortedMarkers.forEach(({ marker }) => {
